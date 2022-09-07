@@ -1,35 +1,21 @@
-const { User } = require("../models");
+//const { User } = require("../models");
 
-// Display a listing of the resource.
-async function index(req, res) {}
+// Update user in storage.
+async function update(req, res) {
+  //Validate if logged
+  //user y admin pueden cambiar info
+}
 
-// Display the specified resource.
-async function show(req, res) {}
-
-// Show the form for creating a new resource
-async function create(req, res) {}
-
-// Store a newly created resource in storage.
-async function store(req, res) {}
-
-// Show the form for editing the specified resource.
-async function edit(req, res) {}
-
-// Update the specified resource in storage.
-async function update(req, res) {}
-
-// Remove the specified resource from storage.
-async function destroy(req, res) {}
+// Remove user from storage.
+async function destroy(req, res) {
+  //depende del id de la url devolver true o false, y lo borra si el id es de admin
+  //validate if the id is not from admin himself (no admin can delete himself)
+}
 
 // Otros handlers...
 // ...
 
 module.exports = {
-  index,
-  show,
-  create,
-  store,
-  edit,
   update,
   destroy,
 };
