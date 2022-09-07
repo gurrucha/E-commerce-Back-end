@@ -1,7 +1,10 @@
-//const { Product } = require("../models");
+const { Product } = require("../models");
 
 //Display all products
-async function showAll(req, res) {}
+async function showAll(req, res) {
+  const allProducts = await Product.find();
+  res.json(allProducts);
+}
 
 //Display all products of a certain category
 async function showByCategory(req, res) {}
