@@ -1,16 +1,16 @@
-const Product = require("../models/User");
-const db= require("../db/dataProducts")
+const Product = require("../models/Product");
+const db = require("../db/dataProducts");
+
 module.exports = async () => {
-  await Product.create({
-    name: String,
-    price: Number,
-    stock: Number,
-    description: String,
-    pictures: [],
-    Category: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-    },
-    slug: String,
-  });
+  for (const product of db) {
+    await Product.create({
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      description: product.description,
+      pictures: product.images,
+      Category: product.categories,
+      slug: product.name,
+    });
+  }
 };
