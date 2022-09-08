@@ -1,13 +1,18 @@
 const { Product } = require("../models");
 
 //Display all products
-async function showAll(req, res) {
-  const allProducts = await Product.find();
-  res.json(allProducts);
+async function index(req, res) {
+  if (!req.query.category) {
+    const allProducts = await Product.find();
+    return res.json(allProducts);
+  } else {
+    const products = await Product.find({ Category: { $regex: req.query.category } });
+    return res.json(products);
+  }
 }
 
 //Display all products of a certain category
-async function showByCategory(req, res) {}
+async function show(req, res) {}
 
 // Add a new product (only admin)
 async function store(req, res) {
@@ -25,8 +30,8 @@ async function destroy(req, res) {
 }
 
 module.exports = {
-  showAll,
-  showByCategory,
+  index,
+  show,
   store,
   update,
   destroy,

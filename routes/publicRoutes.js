@@ -9,6 +9,6 @@ const productControll= require("../controllers/productController")
 
 // publicRouter.get("/", userController.index);
 
-publicRouter.get("/products", productControll.showAll);
+publicRouter.get("/products", productControll.index);
 
 module.exports = publicRouter;
