@@ -6,6 +6,11 @@ async function showAll(req, res) {
   res.json(allProducts);
 }
 
+async function showOne(req, res) {
+  const product = await Product.findById(req.params.id);
+  res.json(product);
+}
+
 //Display all products of a certain category
 async function showByCategory(req, res) {}
 
@@ -26,6 +31,7 @@ async function destroy(req, res) {
 
 module.exports = {
   showAll,
+  showOne,
   showByCategory,
   store,
   update,
