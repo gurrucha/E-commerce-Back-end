@@ -143,5 +143,4 @@ for (const product of arrayOfData) {
   });
 }
 
-
 module.exports = newArray;

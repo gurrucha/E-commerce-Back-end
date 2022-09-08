@@ -5,7 +5,7 @@ const routes = require("./routes");
 const APP_PORT = process.env.APP_PORT || 8000;
 const app = express();
 const productSeeder = require("./seeders/productSeeder.js");
-
+const cors = require("cors");
 
 const mongoose = require("./db/dbInitialSetup");
 mongoose.connection
@@ -16,10 +16,12 @@ mongoose.connection
 //   await productSeeder();
 //   console.log("la base de datos fue ejecutada");
 // })();
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
+app.use(cors());
 routes(app);
 
 app.listen(APP_PORT, () => {
