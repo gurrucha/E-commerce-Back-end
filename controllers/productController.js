@@ -11,13 +11,13 @@ async function index(req, res) {
   }
 }
 
-async function showOne(req, res) {
+async function show(req, res) {
   const product = await Product.findById(req.params.id);
   res.json(product);
 }
 
-//Display all products of a certain category
-async function show(req, res) {}
+// //Display all products of a certain category
+// async function show(req, res) {}
 
 // Add a new product (only admin)
 async function store(req, res) {

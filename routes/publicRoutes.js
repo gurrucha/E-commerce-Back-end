@@ -11,6 +11,6 @@ const productControll = require("../controllers/productController");
 
 publicRouter.get("/products", productControll.index);
 
-publicRouter.get("/product/:id", productControll.showOne);
+publicRouter.get("/product/:id", productControll.show);
 
 module.exports = publicRouter;
