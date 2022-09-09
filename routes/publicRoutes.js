@@ -1,7 +1,6 @@
 const express = require("express");
 const publicRouter = express.Router();
 const productControll = require("../controllers/productController");
-//import controllers
 
 // publicRouter.post("/login", authController.login);
 
@@ -15,6 +14,7 @@ publicRouter.get("/products/cart", productControll.showCart);
 
 publicRouter.get("/products/random", productControll.getRandom);
 
+//change product to porducts for rest model
 publicRouter.get("/product/:id", productControll.show);
 
 module.exports = publicRouter;

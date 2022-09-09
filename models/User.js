@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 //const bcrypt = require("bcryptjs");
 
-//creamos nuevo Schema
+//Create new scheme
 const userSchema = new Schema({
   firstname: String,
   lastname: String,
@@ -14,6 +14,8 @@ const userSchema = new Schema({
   isAdmin: Boolean,
 });
 
+
+//HOOK TO VALIDATE PASSWORD
 // userSchema.pre("save", async function (req, res, next) {
 //   const user = this;
 //   user.password = await bcrypt.hash(user.password, 10);

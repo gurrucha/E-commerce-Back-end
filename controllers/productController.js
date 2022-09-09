@@ -12,20 +12,21 @@ async function index(req, res) {
   }
 }
 
+//Show all products by id from query
 async function showCart(req, res) {
   const object = await Product.findById(req.query.product);
-  const objectProduct = object;
-  res.json(objectProduct);
+  res.json(object);
 }
 
+//Get a random number of elements
 async function getRandom(req, res) {
-  console.log("entre");
   const allProducts = await Product.find({ _id: { $ne: req.query.idToAvoid } });
-  //pasarle random number no 3 hard coded
+  //TIP-to implement: bring number by query instead
   const random = _.sampleSize(allProducts, 3);
   res.json(random);
 }
 
+//Show specific product by id through params
 async function show(req, res) {
   const product = await Product.findById(req.params.id);
   res.json(product);

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//creamos nuevo Schema
+//Create new scheme
 const categorySchema = new Schema({
   name: String,
   products: [
