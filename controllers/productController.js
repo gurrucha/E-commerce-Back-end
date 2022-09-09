@@ -1,23 +1,35 @@
 const { Product } = require("../models");
+const _ = require("lodash");
 
 //Display all products
 async function index(req, res) {
-  if (!req.query.category) {
+  if (!req.query.infoToFindBy) {
     const allProducts = await Product.find();
     return res.json(allProducts);
-  } else {
-    const products = await Product.find({ Category: { $regex: req.query.category } });
+  } else if (typeof req.query.infoToFindBy === "string") {
+    const products = await Product.find({ Category: { $regex: req.query.infoToFindBy } });
     return res.json(products);
   }
 }
 
-async function showOne(req, res) {
+async function showCart(req, res) {
+  const object = await Product.findById(req.query.product);
+  const objectProduct = object;
+  res.json(objectProduct);
+}
+
+async function getRandom(req, res) {
+  console.log("entre");
+  const allProducts = await Product.find({ _id: { $ne: req.query.idToAvoid } });
+  //pasarle random number no 3 hard coded
+  const random = _.sampleSize(allProducts, 3);
+  res.json(random);
+}
+
+async function show(req, res) {
   const product = await Product.findById(req.params.id);
   res.json(product);
 }
-
-//Display all products of a certain category
-async function show(req, res) {}
 
 // Add a new product (only admin)
 async function store(req, res) {
@@ -36,8 +48,10 @@ async function destroy(req, res) {
 
 module.exports = {
   index,
+  showCart,
   show,
   store,
   update,
   destroy,
+  getRandom,
 };

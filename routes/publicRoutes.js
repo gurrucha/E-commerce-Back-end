@@ -11,6 +11,10 @@ const productControll = require("../controllers/productController");
 
 publicRouter.get("/products", productControll.index);
 
-publicRouter.get("/product/:id", productControll.showOne);
+publicRouter.get("/products/cart", productControll.showCart);
+
+publicRouter.get("/products/random", productControll.getRandom);
+
+publicRouter.get("/product/:id", productControll.show);
 
 module.exports = publicRouter;
