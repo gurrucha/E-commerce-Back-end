@@ -10,8 +10,6 @@ const productControll = require("../controllers/productController");
 
 publicRouter.get("/products", productControll.index);
 
-publicRouter.get("/products/cart", productControll.showCart);
-
 publicRouter.get("/products/random", productControll.getRandom);
 
 //change product to porducts for rest model

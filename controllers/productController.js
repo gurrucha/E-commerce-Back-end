@@ -3,19 +3,16 @@ const _ = require("lodash");
 
 //Display all products
 async function index(req, res) {
-  if (!req.query.infoToFindBy) {
+  if (!req.query.data) {
     const allProducts = await Product.find();
     return res.json(allProducts);
-  } else if (typeof req.query.infoToFindBy === "string") {
-    const products = await Product.find({ Category: { $regex: req.query.infoToFindBy } });
+  } else if (req.query.fndBy === "Category") {
+    const products = await Product.find({ Category: { $regex: req.query.data } });
+    return res.json(products);
+  } else if (req.query.fndBy === "Name") {
+    const products = await Product.find({ name: { $regex: req.query.data } });
     return res.json(products);
   }
-}
-
-//Show all products by id from query
-async function showCart(req, res) {
-  const object = await Product.findById(req.query.product);
-  res.json(object);
 }
 
 //Get a random number of elements
@@ -49,7 +46,6 @@ async function destroy(req, res) {
 
 module.exports = {
   index,
-  showCart,
   show,
   store,
   update,
