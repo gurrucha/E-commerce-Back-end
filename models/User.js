@@ -4,16 +4,16 @@ const Schema = mongoose.Schema;
 
 //Create new scheme
 const userSchema = new Schema({
-  firstname: String,
-  lastname: String,
-  email: String,
-  password: String,
-  phone: String,
+  firstname: { type: String },
+  lastname: { type: String },
+  username: { type: String },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  phone: { type: String },
   adress: [],
   orderHistory: [],
   isAdmin: Boolean,
 });
-
 
 //HOOK TO VALIDATE PASSWORD
 // userSchema.pre("save", async function (req, res, next) {

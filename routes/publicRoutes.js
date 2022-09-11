@@ -1,10 +1,11 @@
 const express = require("express");
 const publicRouter = express.Router();
 const productControll = require("../controllers/productController");
+const authController = require("../controllers/authController");
 
-// publicRouter.post("/login", authController.login);
+publicRouter.post("/login", authController.login);
 
-// publicRouter.post("/register", authController.register);
+publicRouter.post("/register", authController.store);
 
 // publicRouter.get("/", userController.index);
 
