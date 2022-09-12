@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-//const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 //Create new scheme
 const userSchema = new Schema({
@@ -15,12 +15,13 @@ const userSchema = new Schema({
   isAdmin: Boolean,
 });
 
-//HOOK TO VALIDATE PASSWORD
-// userSchema.pre("save", async function (req, res, next) {
-//   const user = this;
-//   user.password = await bcrypt.hash(user.password, 10);
-//   return next();
-// });
+// HOOK TO VALIDATE PASSWORD
+userSchema.pre("save", async function (req, res, next) {
+  const user = this;
+
+  user.password = await bcrypt.hash(user.password, 8);
+  return next();
+});
 
 //conectamos con la base de datos
 const User = mongoose.model("User", userSchema);
