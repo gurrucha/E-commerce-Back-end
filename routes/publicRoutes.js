@@ -14,6 +14,6 @@ publicRouter.get("/products", productControll.index);
 publicRouter.get("/products/random", productControll.getRandom);
 
 //change product to porducts for rest model
-publicRouter.get("/product/:id", productControll.show);
+publicRouter.get("/product/:slug", productControll.show);
 
 module.exports = publicRouter;
