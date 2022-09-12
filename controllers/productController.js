@@ -25,8 +25,7 @@ async function getRandom(req, res) {
 
 //Show specific product by id through params
 async function show(req, res) {
-  console.log(req.params);
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findOne({ slug: req.params.slug });
   res.json(product);
 }
 
