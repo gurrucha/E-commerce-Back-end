@@ -2,17 +2,38 @@ const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-//log a user
+//log a user/admin
 async function login(req, res) {
+  const admin = await User.findOne({
+    $or: [
+      { email: req.body.emailorUsername === "admin@admin.com" },
+      { username: req.body.emailorUsername === "admin" },
+    ],
+  });
+
   const user = await User.findOne({
     $or: [{ email: req.body.emailorUsername }, { username: req.body.emailorUsername }],
   });
 
-  if (user) {
+  if (admin) {
     const compare = await bcrypt.compare(req.body.password, user.password);
 
     if (compare) {
-      const token = jwt.sign({ user: user.username, id: user.id }, process.env.JWT_TOKEN_KEY);
+      const token = jwt.sign(
+        { user: user.username, id: user.id, isAdmin: true },
+        process.env.JWT_TOKEN_KEY,
+      );
+      res.status(200).json({ token });
+    } else {
+      res.status(400).json({ message: "Invalid credentials." });
+    }
+  } else if (user) {
+    const compare = await bcrypt.compare(req.body.password, user.password);
+    if (compare) {
+      const token = jwt.sign(
+        { user: user.username, id: user.id, isAdmin: false },
+        process.env.JWT_TOKEN_KEY,
+      );
       res.status(200).json({ token });
     } else {
       res.status(400).json({ message: "Invalid credentials." });
