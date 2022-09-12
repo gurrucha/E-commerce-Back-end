@@ -7,6 +7,9 @@ const orderSchema = new Schema({
   user: {},
   userOrder: String,
   adress: String,
+  telephone: String,
+  city: String,
+  direccion: String,
   //json
   products: String,
   createdAt: String,

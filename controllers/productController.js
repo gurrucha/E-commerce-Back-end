@@ -10,6 +10,7 @@ async function index(req, res) {
     const products = await Product.find({ Category: { $regex: req.query.data } });
     return res.json(products);
   } else if (req.query.fndBy === "Name") {
+    //buscar tambien por la descripcion
     const products = await Product.find({ name: { $regex: req.query.data } });
     return res.json(products);
   }
@@ -25,7 +26,7 @@ async function getRandom(req, res) {
 
 //Show specific product by id through params
 async function show(req, res) {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findOne({ _id: req.params.id });
   res.json(product);
 }
 
@@ -36,12 +37,23 @@ async function store(req, res) {
 
 // Update any product (only admin)
 async function update(req, res) {
-  //validate if user is admin
+  console.log(req.body);
+  const newProd = await Product.findByIdAndUpdate(req.body._id, {
+    name: req.body.name,
+    Category: req.body.Category,
+    price: req.body.price,
+    stock: req.body.stock,
+  });
+  console.log("new prod", newProd);
 }
 
 // Remove product from storage (only admin)
 async function destroy(req, res) {
-  //validate if user is admin
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+  } catch (error) {
+    res.status(500);
+  }
 }
 
 module.exports = {

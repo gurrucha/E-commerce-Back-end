@@ -1,4 +1,9 @@
-//const { User } = require("../models");
+const { User } = require("../models");
+
+async function show(req, res) {
+  const allUsers = await User.find();
+  res.json(allUsers);
+}
 
 // Update user in storage.
 async function update(req, res) {
@@ -16,6 +21,7 @@ async function destroy(req, res) {
 // ...
 
 module.exports = {
+  show,
   update,
   destroy,
 };

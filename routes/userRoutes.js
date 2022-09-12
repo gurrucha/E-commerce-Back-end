@@ -1,13 +1,15 @@
 const express = require("express");
 const userRouter = express.Router();
+const userController = require("../controllers/userController");
 
-// //USER---------------------------------------------------------
-// //ADMIN-USER
-// userRouter.patch("/user/:id", userControll.update);
+//userRouter.get("/users", userController.index);
 
-// //ORDER---------------------------------------------------------
-// //ADMIN-USER
-// userRouter.post("/order/:id", orderControll.store);
+userRouter.get("/users", userController.show);
 
+//userRouter.post("/users.:id", userController.store);
 
-// module.exports = userRouter;
+userRouter.patch("/users/:id", userController.update);
+
+userRouter.delete("/users/:id", userController.destroy);
+
+module.exports = userRouter;

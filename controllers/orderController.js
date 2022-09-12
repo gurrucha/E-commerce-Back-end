@@ -1,4 +1,4 @@
-//const { Order } = require("../models");
+const { Order } = require("../models");
 
 // Display orders of user.
 async function showAll(req, res) {
@@ -7,7 +7,10 @@ async function showAll(req, res) {
 
 // Store a new order in storage and in the specified user.
 async function store(req, res) {
-  //if logged and is in checkout add new order
+  const newUser = new Order({
+    email: req.body.email,
+    password: req.body.password,
+  });
 }
 
 // Update order in storage.
