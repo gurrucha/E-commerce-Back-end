@@ -10,7 +10,7 @@ module.exports = async () => {
       stock: product.stock,
       description: product.description,
       pictures: product.images,
-      Category: product.categories,
+      category: product.categories,
       slug: slugify(product.name, { lower: true }),
     });
   }
