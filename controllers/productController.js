@@ -38,7 +38,7 @@ async function store(req, res) {
 // Update any product (only admin)
 async function update(req, res) {
   console.log(req.body);
-  const newProd = await Product.findByIdAndUpdate(req.body._id, {
+  const newProd = await Product.findByIdAndUpdate(req.body.id, {
     name: req.body.name,
     Category: req.body.Category,
     price: req.body.price,

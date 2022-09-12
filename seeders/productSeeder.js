@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const db = require("../db/dataProducts");
+const slugify = require("slugify");
 
 module.exports = async () => {
   for (const product of db) {
@@ -10,7 +11,7 @@ module.exports = async () => {
       description: product.description,
       pictures: product.images,
       Category: product.categories,
-      slug: product.name,
+      slug: slugify(product.name, { lower: true }),
     });
   }
 };

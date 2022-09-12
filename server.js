@@ -12,6 +12,7 @@ mongoose.connection
   .on("error", (error) => console.log(error));
 
 // (async function () {
+//   await mongoose.connection.dropDatabase();
 //   await productSeeder();
 //   console.log("la base de datos fue ejecutada");
 // })();
