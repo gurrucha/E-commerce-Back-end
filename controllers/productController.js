@@ -54,8 +54,6 @@ async function store(req, res) {
     category: req.body.category,
     slug: slugify(product.name, { lower: true }),
   });
-  console.log("newprod", newProduct);
-  s;
 }
 
 // Update any product (only admin)
