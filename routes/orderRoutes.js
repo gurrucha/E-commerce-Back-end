@@ -1,6 +1,15 @@
 const express = require("express");
 const orderRouter = express.Router();
 const orderController = require("../controllers/orderController");
+const { expressjwt: jwt } = require("express-jwt");
+
+const verifyJwt = jwt({
+  secret: process.env.JWT_TOKEN_KEY,
+  algorithms: ["HS256"],
+});
+
+// To enter any of the routes the user must be logged in ( as admin)
+orderRouter.use(verifyJwt);
 
 //orderRouter.get("/orders", orderController.index);
 

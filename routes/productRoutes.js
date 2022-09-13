@@ -1,6 +1,12 @@
 const express = require("express");
 const productRouter = express.Router();
 const productController = require("../controllers/productController");
+const { expressjwt: jwt } = require("express-jwt");
+
+const verifyJwt = jwt({
+  secret: process.env.JWT_TOKEN_KEY,
+  algorithms: ["HS256"],
+});
 
 productRouter.get("/products", productController.index);
 

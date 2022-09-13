@@ -7,7 +7,7 @@ async function index(req, res) {
     const allProducts = await Product.find();
     return res.json(allProducts);
   } else if (req.query.fndBy === "Category") {
-    const products = await Product.find({ Category: { $regex: req.query.data } });
+    const products = await Product.find({ category: { $regex: req.query.data } });
     return res.json(products);
   } else if (req.query.fndBy === "Name") {
     //buscar tambien por la descripcion
@@ -26,6 +26,7 @@ async function getRandom(req, res) {
 
 //Show specific product by id through params
 async function show(req, res) {
+  console.log(req.params.slug);
   const product = await Product.findOne({ slug: req.params.slug });
   res.json(product);
 }
@@ -38,7 +39,7 @@ async function store(req, res) {
 // Update any product (only admin)
 async function update(req, res) {
   console.log("product incoming", req.body);
-  const newProd= await Product.findById(req.body._id)
+  const newProd = await Product.findById(req.body._id);
   const newProd1 = await Product.findByIdAndUpdate(req.body._id, {
     name: req.body.name,
     category: req.body.category,

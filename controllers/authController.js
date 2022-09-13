@@ -64,12 +64,6 @@ async function store(req, res) {
   }
 }
 
-// async function token(req,res){
-//   const user = await User.findOne({
-//     $or: [{ ema}]
-//   })
-// }
-
 module.exports = {
   login,
   store,
