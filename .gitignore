@@ -2,7 +2,9 @@
 # Defaults de NODE obtenidos aquí:
 # https://github.com/github/gitignore.
 # ----------------------------------------------------------------------------
-
+# Status
+409: name already exists 
+500: error in execution 
 # Logs
 logs
 _.log

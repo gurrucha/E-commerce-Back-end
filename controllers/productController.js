@@ -1,5 +1,6 @@
 const { Product } = require("../models");
 const _ = require("lodash");
+const slugify = require("slugify");
 
 //Display all products
 async function index(req, res) {
@@ -26,27 +27,52 @@ async function getRandom(req, res) {
 
 //Show specific product by id through params
 async function show(req, res) {
-  console.log(req.params.slug);
   const product = await Product.findOne({ slug: req.params.slug });
+
+  // if (product) {
+  //   return res.json(product);
+  // } else {
+  //   return res.json({});
+  // }
   res.json(product);
 }
 
 // Add a new product (only admin)
 async function store(req, res) {
-  //validate if user is admin
+  console.log("body", req.body);
+
+  const product = await Product.find({ name: req.body.name });
+  if (product) {
+    res.json(409);
+  }
+
+  const newProduct = new Product({
+    name: req.body.name,
+    price: req.body.price,
+    stock: req.body.stock,
+    description: req.body.description,
+    pictures: [],
+    category: req.body.category,
+    slug: slugify(product.name, { lower: true }),
+  });
+  console.log("newprod", newProduct);
+  s;
 }
 
 // Update any product (only admin)
 async function update(req, res) {
-  console.log("product incoming", req.body);
-  const newProd = await Product.findById(req.body._id);
-  const newProd1 = await Product.findByIdAndUpdate(req.body._id, {
-    name: req.body.name,
-    category: req.body.category,
-    price: req.body.price,
-    stock: req.body.stock,
-  });
-  console.log("new prod", newProd);
+  try {
+    await Product.findByIdAndUpdate(req.body.product._id, {
+      name: req.body.product.name,
+      category: req.body.product.category,
+      price: req.body.product.price,
+      stock: req.body.product.stock,
+      description: req.body.product.description,
+    });
+    res.status(200);
+  } catch (error) {
+    res.status(500);
+  }
 }
 
 // Remove product from storage (only admin)

@@ -6,8 +6,6 @@ const userController = require("../controllers/userController");
 
 userRouter.get("/users", userController.show);
 
-//userRouter.post("/users.:id", userController.store);
-
 userRouter.patch("/users/:id", userController.update);
 
 userRouter.delete("/users/:id", userController.destroy);

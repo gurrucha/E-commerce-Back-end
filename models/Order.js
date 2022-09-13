@@ -5,13 +5,14 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema({
   name: String,
   user: {},
-  userOrder: String,
+  companyName: String,
   adress: String,
-  telephone: String,
   city: String,
-  direccion: String,
-  //json
-  products: String,
+  postalCode: String,
+  telephone: String,
+  mail: String,
+  additionalDescription: String,
+  products: JSON,
   createdAt: String,
 });
 
