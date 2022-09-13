@@ -1,4 +1,5 @@
 const { Order } = require("../models");
+const { User } = require("../models");
 
 // Display orders of user.
 async function showAll(req, res) {
@@ -7,31 +8,38 @@ async function showAll(req, res) {
 
 // Store a new order in storage and in the specified user.
 async function store(req, res) {
-  console.log("req.body", req.body);
+  //format the data for when the product was created
   const today = new Date();
   const yyyy = today.getFullYear();
   let mm = today.getMonth() + 1; // Months start at 0!
   let dd = today.getDate();
   if (dd < 10) dd = "0" + dd;
   if (mm < 10) mm = "0" + mm;
+
   const formattedToday = dd + "/" + mm + "/" + yyyy;
 
- 
-  console.log("formattedToday", formattedToday);
   const newOrder = new Order({
-    name: req.body.name,
-    user: req.body.users,
-    companyName: req.body.companyName,
-    adress: req.body.adress,
-    city: req.body.city,
-    postalCode: req.body.postalCode,
-    telephone: req.body.telephone,
-    mail: req.body.mail,
-    additionalDescription: req.body.additionalDescription,
-    products: req.body.products,
+    name: req.body.order.name,
+    user: req.body.userId,
+    companyName: req.body.order.companyName,
+    adress: req.body.order.adress,
+    city: req.body.order.city,
+    postalCode: req.body.order.postalCode,
+    telephone: req.body.order.telephone,
+    mail: req.body.order.mail,
+    additionalDescription: req.body.order.additionalDescription,
+    products: req.body.order.products,
     createdAt: formattedToday,
   });
-  console.log("newOrder", newOrder);
+  
+  await User.findByIdAndUpdate(req.body.userId, {
+    $push: { orderHistory: newOrder },
+  });
+
+  newOrder.save(function (err) {
+    if (err) return res.json(404);
+    return res.json(200);
+  });
 }
 
 // Update order in storage.

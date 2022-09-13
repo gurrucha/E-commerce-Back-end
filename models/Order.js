@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 //Create new scheme
 const orderSchema = new Schema({
   name: String,
-  user: {},
+  user: String,
   companyName: String,
   adress: String,
   city: String,
@@ -12,7 +12,7 @@ const orderSchema = new Schema({
   telephone: String,
   mail: String,
   additionalDescription: String,
-  products: JSON,
+  products: [],
   createdAt: String,
 });
 
