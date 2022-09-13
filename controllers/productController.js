@@ -19,21 +19,20 @@ async function index(req, res) {
 
 //Get a random number of elements
 async function getRandom(req, res) {
-  const allProducts = await Product.find({ slug: { $ne: req.query.slugToAvoid } });
-  //TIP-to implement: bring number by query instead
-  const random = _.sampleSize(allProducts, 3);
-  res.json(random);
+  if (req.query.slugToAvoid) {
+    const allProductsWithoutId = await Product.find({ slug: { $ne: req.query.slugToAvoid } });
+    const random = _.sampleSize(allProductsWithoutId, req.query.randomNumber);
+    return res.json(random);
+  } else {
+    const allProducts = await Product.find();
+    const random = _.sampleSize(allProducts, req.query.randomNumber);
+    return res.json(random);
+  }
 }
 
 //Show specific product by id through params
 async function show(req, res) {
   const product = await Product.findOne({ slug: req.params.slug });
-
-  // if (product) {
-  //   return res.json(product);
-  // } else {
-  //   return res.json({});
-  // }
   res.json(product);
 }
 
