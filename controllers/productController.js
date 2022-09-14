@@ -38,28 +38,36 @@ async function show(req, res) {
 
 // Add a new product (only admin)
 async function store(req, res) {
-  console.log("body", req.body);
 
-  const product = await Product.find({ name: req.body.name });
+  const product = await Product.findOne({ name: req.body.product.name });
   if (product) {
-    res.json(409);
+    return res.json(409);
+  } else {
+    try {
+      const newProduct = new Product({
+        name: req.body.product.name,
+        price: req.body.product.price,
+        stock: req.body.product.stock,
+        description: req.body.product.description,
+        pictures: [],
+        category: req.body.product.category,
+        slug: slugify(req.body.product.name, { lower: true }),
+      });
+      newProduct.save(function (err) {
+        if (err) return res.json(404);
+        return res.json(200);
+      });
+    } catch (error) {
+      console.log("error")
+      return res.json(500);
+    }
   }
 
-  const newProduct = new Product({
-    name: req.body.name,
-    price: req.body.price,
-    stock: req.body.stock,
-    description: req.body.description,
-    pictures: [],
-    category: req.body.category,
-    slug: slugify(product.name, { lower: true }),
-  });
 }
 
-// Update any product (only admin)
 async function update(req, res) {
   try {
-    await Product.findByIdAndUpdate(req.body.product._id, {
+    await Product.findOneAndUpdate({ slug: req.params.slug }, {
       name: req.body.product.name,
       category: req.body.product.category,
       price: req.body.product.price,
@@ -75,7 +83,7 @@ async function update(req, res) {
 // Remove product from storage (only admin)
 async function destroy(req, res) {
   try {
-    await Product.findByIdAndDelete(req.params.id);
+    await Product.findOneAndDelete({ slug: req.params.slug });
   } catch (error) {
     res.status(500);
   }
