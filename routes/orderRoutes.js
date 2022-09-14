@@ -8,7 +8,7 @@ const verifyJwt = jwt({
   algorithms: ["HS256"],
 });
 
-// To enter any of the routes the user must be logged in ( as admin)
+// To enter any of the routes the user must be logged in
 orderRouter.use(verifyJwt);
 
 //orderRouter.get("/orders", orderController.index);

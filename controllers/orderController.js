@@ -24,11 +24,11 @@ async function store(req, res) {
       prodOutOfStock.push({ name: findProduct.name, stockLeft: findProduct.stock, picture: findProduct.pictures[1] })
     }
   }
-  
+
   if (stockValid) {
     const newOrder = new Order({
       name: req.body.order.name,
-      user: req.body.userId,
+      user: req.auth.id,
       companyName: req.body.order.companyName,
       adress: req.body.order.adress,
       city: req.body.order.city,
@@ -40,7 +40,7 @@ async function store(req, res) {
       createdAt: formattedToday,
     });
 
-    await User.findByIdAndUpdate(req.body.userId, {
+    await User.findByIdAndUpdate(req.auth.id, {
       $push: { orderHistory: newOrder },
     });
 
