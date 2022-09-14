@@ -17,7 +17,7 @@ async function login(req, res) {
           process.env.JWT_TOKEN_KEY,
         );
 
-        return res.status(200).json({ token, isAdmin: true });
+        return res.status(200).json({ token, isAdmin: true, userId: user.id });
       } else {
         return res.status(400).json({ message: "Invalid credentials." });
       }
@@ -50,15 +50,18 @@ async function store(req, res) {
         password: req.body.password,
         isAdmin: false,
       });
+
       await newUser.save();
+
+      const token = jwt.sign({ user: newUser.email, id: newUser.id }, process.env.JWT_TOKEN_KEY);
+
+      return res.status(201).json({ token, isAdmin: false, userId: newUser.id });
     }
   } catch (error) {
     if (error) {
       return res.status(400).json({ message: "A field is missing." });
     }
   }
-  return res.status(201).json({ message: "New user created." });
-
 }
 
 module.exports = {
