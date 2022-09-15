@@ -29,7 +29,6 @@ async function store(req, res) {
       prodOutOfStock.push({ name: findProduct.name, stockLeft: findProduct.stock, picture: findProduct.pictures[1] })
     }
   }
-
   if (stockValid) {
     const newOrder = new Order({
       name: req.body.order.name,
@@ -42,6 +41,7 @@ async function store(req, res) {
       mail: req.body.order.mail,
       additionalDescription: req.body.order.additionalDescription,
       products: req.body.order.products,
+      totalPrice: req.body.totalPrice,
       createdAt: formattedToday,
     });
 

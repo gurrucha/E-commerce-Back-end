@@ -32,8 +32,15 @@ async function getRandom(req, res) {
 
 //Show specific product by id through params
 async function show(req, res) {
-  const product = await Product.findOne({ slug: req.params.slug });
-  res.json(product);
+  try {
+    const product = await Product.findOne({ slug: req.params.slug });
+    if (product) {
+      return res.json(product);
+    }
+    return res.json("El producto no existe! Ha sido eliminado");
+  } catch (error) {
+    res.status(404)
+  }
 }
 
 // Add a new product (only admin)
