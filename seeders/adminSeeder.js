@@ -7,6 +7,8 @@ module.exports = async () => {
     username: "random",
     email: "admin@admin.com",
     password: "123",
+    phone: 123456789,
+    adress: "Random Street 1234",
     isAdmin: true,
   });
 };
