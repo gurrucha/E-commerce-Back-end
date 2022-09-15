@@ -56,16 +56,14 @@ async function store(req, res) {
         $set: { stock: newStock }
       });
     }
-
     newOrder.save(function (err) {
-      if (err) return res.json(404);
-      return res.json(200);
+      if (err) return res.status(404).json({ message: "Problem with saving it in the database" });
+      return res.status(200).json({ message: "Correctly created" });
     });
 
   } else {
-    res.json(prodOutOfStock);
+    res.status(403).json(prodOutOfStock);
   }
-
 }
 
 // Update order in storage.

@@ -55,7 +55,7 @@ async function store(req, res) {
 
       const token = jwt.sign({ user: newUser.email, id: newUser.id }, process.env.JWT_TOKEN_KEY);
 
-      return res.status(201).json({ token, isAdmin: false, userId: newUser.id });
+      return res.status(201).json({ token, isAdmin: false, userId: newUser.id, user: newUser.email });
     }
   } catch (error) {
     if (error) {
