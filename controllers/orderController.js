@@ -3,8 +3,13 @@ const { User } = require("../models");
 const { Product } = require("../models");
 
 // Display orders of user.
-async function showAll(req, res) {
-  //if logged show history of orders
+async function index(req, res) {
+  try {
+    const allOrders = await Order.find();
+    res.status(200).json(allOrders);
+  } catch (error) {
+    res.status(404);
+  }
 }
 
 // Store a new order in storage and in the specified user.
@@ -73,7 +78,7 @@ async function update(req, res) {
 async function destroy(req, res) { }
 
 module.exports = {
-  showAll,
+  index,
   store,
   update,
   destroy,

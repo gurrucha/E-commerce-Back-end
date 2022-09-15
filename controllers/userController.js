@@ -13,12 +13,14 @@ async function update(req, res) {
 
 // Remove user from storage.
 async function destroy(req, res) {
-  //depende del id de la url devolver true o false, y lo borra si el id es de admin
-  //validate if the id is not from admin himself (no admin can delete himself)
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    const newListUsers = await User.find({ _id: { $nin: req.params.ids } })
+    res.status(200).json(newListUsers);
+  } catch (error) {
+    res.status(500);
+  }
 }
-
-// Otros handlers...
-// ...
 
 module.exports = {
   show,
