@@ -9,8 +9,8 @@ const userSchema = new Schema({
   username: { type: String },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  phone: { type: String },
-  adress: [],
+  phone: { type: Number },
+  adress: { type: String },
   orderHistory: [],
   isAdmin: Boolean,
 });

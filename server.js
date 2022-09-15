@@ -4,7 +4,7 @@ const routes = require("./routes");
 const APP_PORT = process.env.APP_PORT || 8000;
 const app = express();
 const productSeeder = require("./seeders/productSeeder.js");
-const adminSeeder = require("./seeders/adminSeeder.js")
+const adminSeeder = require("./seeders/adminSeeder.js");
 const cors = require("cors");
 
 const mongoose = require("./db/dbInitialSetup");
