@@ -61,14 +61,14 @@ async function store(req, res) {
           slug: slugify(req.body.product.name, { lower: true }),
         });
         newProduct.save();
-        return res.status(200).json({ message: "Product saved correctly" });
+        return res.status(200).json({ message: "El producto se guardo correctamente" });
       } catch (error) {
         return res.status(500).json({ message: "Error!" });
       }
     }
   } catch (error) {
     if (error) {
-      return res.status(400).json({ message: "A field is missing." });
+      return res.status(400).json({ message: "Algún casillero esta vacío" });
     }
   }
 
