@@ -23,7 +23,6 @@ async function update(req, res) {
       phone: req.body.phone,
       adress: req.body.adress,
     });
-    newUser.save();
     res.status(200).json({ Message: "Se actualizó la información del usuario!" });
   } catch (error) {
     res.status(400).json({ Message: "No se pudo actualizar la información del usuario." });
