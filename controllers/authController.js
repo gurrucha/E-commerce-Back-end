@@ -40,23 +40,29 @@ async function login(req, res) {
 //regist a user
 async function store(req, res) {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const correctEmailFormat = req.body.email.match(mailformat);
+    if (correctEmailFormat) {
+      const user = await User.findOne({ email: req.body.email });
 
-    if (user) {
-      return res.status(409).json({ message: "User already exists." });
-    } else {
-      const newUser = new User({
-        email: req.body.email,
-        password: req.body.password,
-        isAdmin: false,
-      });
+      if (user) {
+        return res.status(409).json({ message: "User already exists." });
+      } else {
+        const newUser = new User({
+          email: req.body.email,
+          password: req.body.password,
+          isAdmin: false,
+        });
 
-      await newUser.save();
+        await newUser.save();
 
-      const token = jwt.sign({ user: newUser.email, id: newUser.id }, process.env.JWT_TOKEN_KEY);
+        const token = jwt.sign({ user: newUser.email, id: newUser.id }, process.env.JWT_TOKEN_KEY);
 
-      return res.status(201).json({ token, isAdmin: false, userId: newUser.id, user: newUser.email });
-    }
+        return res
+          .status(201)
+          .json({ token, isAdmin: false, userId: newUser.id, user: newUser.email });
+      }
+    } else return res.status(400).json({ Message: "A field is missing." });
   } catch (error) {
     if (error) {
       return res.status(400).json({ message: "A field is missing." });

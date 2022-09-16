@@ -23,9 +23,9 @@ async function update(req, res) {
       phone: req.body.phone,
       adress: req.body.adress,
     });
-    res.status(200).json({ Message: "User information updated!" });
+    res.status(200).json({ Message: "Se actualizó la información del usuario!" });
   } catch (error) {
-    res.status(400).json({ Message: "Can't update user information." });
+    res.status(400).json({ Message: "No se pudo actualizar la información del usuario." });
   }
 
   //Validate if logged
@@ -34,9 +34,10 @@ async function update(req, res) {
 
 // Remove user from storage.
 async function destroy(req, res) {
+  // console.log(req.auth); Undefined, why?
   try {
     await User.findByIdAndDelete(req.params.id);
-    const newListUsers = await User.find({ _id: { $nin: req.params.ids } })
+    const newListUsers = await User.find({ _id: { $nin: req.params.ids } });
     res.status(200).json(newListUsers);
   } catch (error) {
     res.status(500);

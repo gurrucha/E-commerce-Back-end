@@ -13,11 +13,11 @@ mongoose.connection
   .on("error", (error) => console.log(error));
 
 // (async function () {
-// //   await mongoose.connection.dropDatabase();
-// //   await productSeeder();
-// //   await adminSeeder();
-// //   console.log("la base de datos fue ejecutada");
-// // })();
+//   await mongoose.connection.dropDatabase();
+//   await productSeeder();
+//   await adminSeeder();
+//   console.log("la base de datos fue ejecutada");
+// })();
 
 app.use(cors());
 app.use(express.static("public"));
