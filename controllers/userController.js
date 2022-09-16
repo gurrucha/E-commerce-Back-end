@@ -16,7 +16,7 @@ async function loggedUser(req, res) {
 // Update user in storage.
 async function update(req, res) {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, {
+    await User.findByIdAndUpdate(req.params.id, {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       username: req.body.username,

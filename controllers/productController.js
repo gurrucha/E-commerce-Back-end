@@ -35,7 +35,7 @@ async function show(req, res) {
   try {
     const product = await Product.findOne({ slug: req.params.slug });
     if (product) {
-      return res.json(product);
+      return res.status(200).json(product);
     }
     return res.json("El producto no existe! Ha sido eliminado");
   } catch (error) {
@@ -45,15 +45,10 @@ async function show(req, res) {
 
 // Add a new product (only admin)
 async function store(req, res) {
-  const validCategories = ["Herrajes", "Tiradores", "Grifería"];
-
-  const product = await Product.findOne({ name: req.body.product.name });
-  if (product) {
-    return res.json(409);
-  } else {
-    //verify if category exists
-    if (!validCategories.includes(req.body.product.category)) {
-      return res.json(408);
+  try {
+    const product = await Product.findOne({ name: req.body.product.name });
+    if (product) {
+      return res.json(409);
     } else {
       try {
         const newProduct = new Product({
@@ -65,31 +60,28 @@ async function store(req, res) {
           category: req.body.product.category,
           slug: slugify(req.body.product.name, { lower: true }),
         });
-        newProduct.save(function (err) {
-          if (err) return res.json(404);
-          return res.json(200);
-        });
+        newProduct.save();
+        return res.status(200).json({ message: "Product saved correctly" });
       } catch (error) {
-        console.log("error")
-        return res.json(500);
+        return res.status(500).json({ message: "Error!" });
       }
     }
+  } catch (error) {
+    if (error) {
+      return res.status(400).json({ message: "A field is missing." });
+    }
   }
+
 }
 
 async function update(req, res) {
-  const validCategories = ["Herrajes", "Tiradores", "Grifería"];
-
-
-  let productExists;
-  if (req.body.product.name !== req.body.originalName) {
-    productExists = await Product.findOne({ name: req.body.product.name });
-  }
-  if (productExists) {
-    return res.json(409);
-  } else {
-    if (!validCategories.includes(req.body.product.category)) {
-      return res.json(408);
+  try {
+    let productExists;
+    if (req.body.product.name !== req.body.originalName) {
+      productExists = await Product.findOne({ name: req.body.product.name });
+    }
+    if (productExists) {
+      return res.json(409);
     } else {
       try {
         const updateProduct = await Product.findOneAndUpdate({ slug: req.params.slug }, {
@@ -99,13 +91,15 @@ async function update(req, res) {
           stock: req.body.product.stock,
           description: req.body.product.description,
         });
-        updateProduct.save(function (err) {
-          if (err) return res.json(404);
-          return res.json(200);
-        });
+        updateProduct.save();
+        return res.json(200);
       } catch (error) {
-        res.status(500);
+        res.status(500).json({ message: "Error! Not a valid product" });
       }
+    }
+  } catch (error) {
+    if (error) {
+      return res.status(400).json({ message: "A field is missing." });
     }
   }
 }
