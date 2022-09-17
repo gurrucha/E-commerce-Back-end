@@ -1,9 +1,12 @@
 const { Product } = require("../models");
 const _ = require("lodash");
 const slugify = require("slugify");
+const Category = require("../models/Category");
 
 //Display all products
 async function index(req, res) {
+  const categories = await Category.find();
+  console.log("category",categories)
   if (!req.query.data) {
     const allProducts = await Product.find();
     return res.json(allProducts);

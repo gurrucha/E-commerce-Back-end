@@ -9,7 +9,6 @@ async function loggedUser(req, res) {
   const user = await User.findById(req.params.id).select(
     "firstname lastname username email adress phone orderHistory",
   );
-
   res.status(200).json({ user: user });
 }
 

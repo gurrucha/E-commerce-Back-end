@@ -1,0 +1,41 @@
+const Category = require("../models/Category");
+
+async function index(req, res) {
+   try {
+      const allCategories = await Category.find();
+      res.status(200).json(allCategories);
+
+   } catch (error) {
+      res.status(400).json({ message: "Error! No category found" })
+   }
+}
+
+async function show(req, res) {
+
+}
+async function showByCategory(req, res) {
+   try {
+      const allCategories = await Category.findOne({ name: req.params.name });
+      res.status(200).json(allCategories);
+   } catch (error) {
+      res.status(400).json({ message: "Error! No category found" })
+   }
+}
+
+async function store(req, res) {
+}
+
+async function update(req, res) {
+}
+
+async function destroy(req, res) {
+}
+
+module.exports = {
+   index,
+   show,
+   showByCategory,
+   store,
+   update,
+   destroy,
+};
