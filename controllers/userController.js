@@ -15,13 +15,14 @@ async function loggedUser(req, res) {
 // Update user in storage.
 async function update(req, res) {
   try {
-    const newUser = await User.findByIdAndUpdate(req.params.id, {
+    const userProfileInfo = await User.findByIdAndUpdate(req.params.id, {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       username: req.body.username,
       phone: req.body.phone,
       adress: req.body.adress,
     });
+    // userProfileInfo.save();
     res.status(200).json({ Message: "Se actualizó la información del usuario!" });
   } catch (error) {
     res.status(400).json({ Message: "No se pudo actualizar la información del usuario." });

@@ -18,7 +18,6 @@ const userSchema = new Schema({
 // HOOK TO VALIDATE PASSWORD
 userSchema.pre("save", async function (req, res, next) {
   const user = this;
-
   user.password = await bcrypt.hash(user.password, 8);
   return next();
 });
