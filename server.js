@@ -15,9 +15,9 @@ mongoose.connection
 
 // (async function () {
 //   await mongoose.connection.dropDatabase();
-//   await productSeeder();
 //   await adminSeeder();
 //   await categorySeeder();
+//   await productSeeder();
 //   console.log("La base de datos fue ejecutada");
 // })();
 
