@@ -15,10 +15,12 @@ module.exports = async () => {
       category: product.categories,
       slug: slugify(product.name, { lower: true }),
     });
+    
     await Category.findOneAndUpdate({ name: product.categories },
       {
         $push: { products: newProduct._id }
       }
     );
+
   }
 };

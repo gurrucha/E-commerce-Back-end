@@ -8,6 +8,7 @@ module.exports = (app) => {
   app.use(authRoutes);
   app.use(productRoutes);
   app.use(userRoutes);
-  app.use(orderRoutes);
   app.use(categoryRouter);
+  app.use(orderRoutes);
+
 };
