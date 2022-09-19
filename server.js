@@ -5,7 +5,7 @@ const APP_PORT = process.env.APP_PORT || 8000;
 const app = express();
 const productSeeder = require("./seeders/productSeeder.js");
 const adminSeeder = require("./seeders/adminSeeder.js");
-const categorySeeder = require("./seeders/categorySeeder.js")
+const categorySeeder = require("./seeders/categorySeeder.js");
 const cors = require("cors");
 
 const mongoose = require("./db/dbInitialSetup");
@@ -13,6 +13,7 @@ mongoose.connection
   .once("open", () => console.log("¡Conexión con la base de datos establecida!"))
   .on("error", (error) => console.log(error));
 
+<<<<<<< HEAD
 (async function () {
   await mongoose.connection.dropDatabase();
   await categorySeeder();
@@ -20,6 +21,15 @@ mongoose.connection
   await adminSeeder();
   console.log("la base de datos fue ejecutada");
 })();
+=======
+// (async function () {
+//   await mongoose.connection.dropDatabase();
+//   await productSeeder();
+//   await adminSeeder();
+//   await categorySeeder();
+//   console.log("La base de datos fue ejecutada");
+// })();
+>>>>>>> 4b47ca79475b66635c664621c90469c2b43bec9e
 
 app.use(cors());
 app.use(express.static("public"));
