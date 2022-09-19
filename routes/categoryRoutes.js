@@ -7,11 +7,11 @@ const verifyJwt = jwt({
    secret: process.env.JWT_TOKEN_KEY,
    algorithms: ["HS256"],
 });
+categoryRouter.get("/categories", categoryController.index);
 
 // To enter any of the routes the user must be logged in
 categoryRouter.use(verifyJwt);
 
-categoryRouter.get("/categories", categoryController.index);
 categoryRouter.get("/categories/:name", categoryController.show);
 categoryRouter.get("/categories/products/:name", categoryController.showByCategory);
 categoryRouter.post("/categories", categoryController.store);

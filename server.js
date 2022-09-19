@@ -13,15 +13,6 @@ mongoose.connection
   .once("open", () => console.log("¡Conexión con la base de datos establecida!"))
   .on("error", (error) => console.log(error));
 
-<<<<<<< HEAD
-(async function () {
-  await mongoose.connection.dropDatabase();
-  await categorySeeder();
-  await productSeeder();
-  await adminSeeder();
-  console.log("la base de datos fue ejecutada");
-})();
-=======
 // (async function () {
 //   await mongoose.connection.dropDatabase();
 //   await productSeeder();
@@ -29,7 +20,6 @@ mongoose.connection
 //   await categorySeeder();
 //   console.log("La base de datos fue ejecutada");
 // })();
->>>>>>> 4b47ca79475b66635c664621c90469c2b43bec9e
 
 app.use(cors());
 app.use(express.static("public"));
