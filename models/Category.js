@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 //Create new scheme
 const categorySchema = new Schema({
   name: String,
-  products: [],
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
 
 //conect with the database

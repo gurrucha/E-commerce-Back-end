@@ -1,12 +1,11 @@
 const { Product } = require("../models");
+const Category = require("../models/Category");
+
 const _ = require("lodash");
 const slugify = require("slugify");
-const Category = require("../models/Category");
 
 //Display all products
 async function index(req, res) {
-  const categories = await Category.find();
-  console.log("category",categories)
   if (!req.query.data) {
     const allProducts = await Product.find();
     return res.json(allProducts);
@@ -87,14 +86,18 @@ async function update(req, res) {
       return res.json(409);
     } else {
       try {
-        const updateProduct = await Product.findOneAndUpdate({ slug: req.params.slug }, {
+        await Product.findOneAndUpdate({ slug: req.params.slug }, {
           name: req.body.product.name,
           category: req.body.product.category,
           price: req.body.product.price,
           stock: req.body.product.stock,
           description: req.body.product.description,
         });
-        updateProduct.save();
+        const updateProduct = await Product.findOne({ slug: req.params.slug });
+        if (updateProduct.category !== req.body.originalCategory) {
+          await Category.findOneAndUpdate({ name: updateProduct.category }, { $push: { products: updateProduct._id } });
+          await Category.findOneAndUpdate({ name: req.body.originalCategory }, { $pull: { products: updateProduct._id } });
+        }
         return res.json(200);
       } catch (error) {
         res.status(500).json({ message: "Error! Not a valid product" });

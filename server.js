@@ -13,13 +13,13 @@ mongoose.connection
   .once("open", () => console.log("¡Conexión con la base de datos establecida!"))
   .on("error", (error) => console.log(error));
 
-// (async function () {
-//     await mongoose.connection.dropDatabase();
-//     await productSeeder();
-//     await adminSeeder();
-//     await categorySeeder();
-//   console.log("la base de datos fue ejecutada");
-// })();
+(async function () {
+  await mongoose.connection.dropDatabase();
+  await categorySeeder();
+  await productSeeder();
+  await adminSeeder();
+  console.log("la base de datos fue ejecutada");
+})();
 
 app.use(cors());
 app.use(express.static("public"));

@@ -1,10 +1,12 @@
 const Product = require("../models/Product");
+const Category = require("../models/Category");
+
 const db = require("../db/dataProducts");
 const slugify = require("slugify");
 
 module.exports = async () => {
   for (const product of db) {
-    await Product.create({
+    const newProduct = await Product.create({
       name: product.name,
       price: product.price,
       stock: product.stock,
@@ -13,5 +15,10 @@ module.exports = async () => {
       category: product.categories,
       slug: slugify(product.name, { lower: true }),
     });
+    await Category.findOneAndUpdate({ name: product.categories },
+      {
+        $push: { products: newProduct._id }
+      }
+    );
   }
 };
