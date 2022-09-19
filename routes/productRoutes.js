@@ -5,7 +5,6 @@ const categoryController = require("../controllers/categoryController");
 
 productRouter.get("/products", productController.index);
 //change to products
-productRouter.get("/categories", categoryController.index);
 
 productRouter.get("/product/:slug", productController.show);
 productRouter.post("/products", productController.store);

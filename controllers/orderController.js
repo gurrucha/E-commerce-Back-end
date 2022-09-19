@@ -14,7 +14,6 @@ async function index(req, res) {
 
 // Store a new order in storage and in the specified user.
 async function store(req, res) {
-
   const today = new Date();
   const formattedToday = (new Intl.DateTimeFormat('en-US').format(today));
   let stockValid = true;
