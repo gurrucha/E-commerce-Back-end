@@ -11,9 +11,6 @@ async function index(req, res) {
 }
 
 async function show(req, res) {
-
-}
-async function showByCategory(req, res) {
    try {
       const allCategories = await Category.findOne({ name: req.params.name }).populate("products");
       res.status(200).json(allCategories);
@@ -33,9 +30,8 @@ async function update(req, res) {
          await Product.findByIdAndUpdate(product._id, { category: req.body.newCategoryName })
       })
    } catch (error) {
-      res.status(400).json({ message: "Error! No category found" })
+      res.status(400).json({ message: "Error! Casillero vacío" })
    }
-
 }
 
 async function destroy(req, res) {
@@ -44,7 +40,6 @@ async function destroy(req, res) {
 module.exports = {
    index,
    show,
-   showByCategory,
    store,
    update,
    destroy,

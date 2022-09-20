@@ -12,6 +12,16 @@ async function index(req, res) {
   }
 }
 
+// Display orders of user.
+async function show(req, res) {
+  try {
+    const order = await Order.findById(req.params.id);
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(404);
+  }
+}
+
 // Store a new order in storage and in the specified user.
 async function store(req, res) {
   const today = new Date();
@@ -41,6 +51,7 @@ async function store(req, res) {
         additionalDescription: req.body.order.additionalDescription,
         products: req.body.order.products,
         totalPrice: req.body.totalPrice,
+        state: "Pendiente",
         createdAt: formattedToday,
       });
 
@@ -56,20 +67,25 @@ async function store(req, res) {
         });
       }
       newOrder.save();
-      return res.status(200).json({ message: "Correctly created" })
+      return res.status(200).json({ message: "Agregado correctamente" })
 
     } else {
       res.status(403).json(prodOutOfStock);
     }
   } catch (error) {
-    res.status(401).json({ meesage: "A field is missing." });
+    res.status(401).json({ message: "Algún casillero vacío" });
   }
 }
 
 // Update order in storage.
 async function update(req, res) {
-  //if admin, update the order
-  //dont edit the order form the user specifically
+  try {
+    await Order.findByIdAndUpdate((req.params.id), { state: req.body.stateOrder })
+    const newOrder = await Order.findById(req.params.id);
+    res.status(200).json(newOrder);
+  } catch (error) {
+    res.status(401).json({ message: "Error en la creacion" });
+  }
 }
 
 // Remove order from storage.
@@ -77,6 +93,7 @@ async function destroy(req, res) { }
 
 module.exports = {
   index,
+  show,
   store,
   update,
   destroy,

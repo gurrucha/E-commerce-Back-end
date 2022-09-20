@@ -13,6 +13,7 @@ const orderSchema = new Schema({
   mail: String,
   additionalDescription: String,
   products: [],
+  state: String,
   totalPrice: String,
   createdAt: String,
 });
