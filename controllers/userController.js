@@ -1,4 +1,5 @@
 const { User } = require("../models");
+const bcrypt = require("bcryptjs");
 
 async function show(req, res) {
   const allUsers = await User.find();
@@ -15,15 +16,30 @@ async function loggedUser(req, res) {
 // Update user in storage.
 async function update(req, res) {
   try {
-    const userProfileInfo = await User.findByIdAndUpdate(req.params.id, {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      username: req.body.username,
-      phone: req.body.phone,
-      adress: req.body.adress,
-    });
-    // userProfileInfo.save();
-    res.status(200).json({ Message: "Se actualizó la información del usuario!" });
+    const user = await User.findById(req.params.id);
+    console.log("USUARIO:", user);
+    console.log("currentPassword:", req.body.currentPassword);
+    console.log("newPassword:", req.body.newPassword);
+    console.log("userPassword:", user.password);
+    if (user) {
+      const compare = await bcrypt.compare(req.body.currentPassword, user.password);
+      console.log(compare);
+
+      if (compare) {
+        const userProfileInfo = await User.findByIdAndUpdate(req.params.id, {
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          username: req.body.username,
+          phone: req.body.phone,
+          adress: req.body.adress,
+          password: req.body.newPassword ? req.body.newPassword : user.password,
+        });
+        userProfileInfo.save();
+        return res.status(200).json({ Message: "Se actualizó la información del usuario!" });
+      } else {
+        return res.status(400).json({ message: "Invalid hola credentials." });
+      }
+    }
   } catch (error) {
     res.status(400).json({ Message: "No se pudo actualizar la información del usuario." });
   }
