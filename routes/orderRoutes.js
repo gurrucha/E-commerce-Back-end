@@ -12,7 +12,7 @@ const verifyJwt = jwt({
 orderRouter.use(verifyJwt);
 
 orderRouter.get("/orders", orderController.index);
-//orderRouter.get("/orders/:id", orderController.show);
+orderRouter.get("/orders/:id", orderController.show);
 orderRouter.post("/orders", orderController.store);
 orderRouter.patch("/orders/:id", orderController.update);
 orderRouter.delete("/orders/:id", orderController.destroy);

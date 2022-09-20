@@ -50,11 +50,16 @@ async function update(req, res) {
 
 // Remove user from storage.
 async function destroy(req, res) {
-  // console.log(req.auth); Undefined, why?
   try {
-    await User.findByIdAndDelete(req.params.id);
-    const newListUsers = await User.find({ _id: { $nin: req.params.ids } });
-    res.status(200).json(newListUsers);
+    const user = await User.findById(req.params.id);
+    if (!user.isAdmin) {
+      await User.findByIdAndDelete(req.params.id);
+      const newListUsers = await User.find({ _id: { $nin: req.params.id } });
+      return res.status(200).json(newListUsers);
+    } else {
+      return res.status(401).json({ message: "No se puede borrar el admin loggeado" });
+    }
+
   } catch (error) {
     res.status(500);
   }
