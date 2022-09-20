@@ -17,24 +17,17 @@ async function loggedUser(req, res) {
 async function update(req, res) {
   try {
     const user = await User.findById(req.params.id);
-    console.log("USUARIO:", user);
-    console.log("currentPassword:", req.body.currentPassword);
-    console.log("newPassword:", req.body.newPassword);
-    console.log("userPassword:", user.password);
     if (user) {
       const compare = await bcrypt.compare(req.body.currentPassword, user.password);
-      console.log(compare);
-
       if (compare) {
-        const userProfileInfo = await User.findByIdAndUpdate(req.params.id, {
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          username: req.body.username,
-          phone: req.body.phone,
-          adress: req.body.adress,
-          password: req.body.newPassword ? req.body.newPassword : user.password,
-        });
-        userProfileInfo.save();
+        const userForUpdate = await User.findById(req.params.id);
+        (userForUpdate.firstname = req.body.firstname),
+          (userForUpdate.lastname = req.body.lastname),
+          (userForUpdate.username = req.body.username),
+          (userForUpdate.phone = req.body.phone),
+          (userForUpdate.adress = req.body.adress),
+          (userForUpdate.password = req.body.newPassword ? req.body.newPassword : user.password),
+          await userForUpdate.save();
         return res.status(200).json({ Message: "Se actualizó la información del usuario!" });
       } else {
         return res.status(400).json({ message: "Invalid hola credentials." });
@@ -59,7 +52,6 @@ async function destroy(req, res) {
     } else {
       return res.status(401).json({ message: "No se puede borrar el admin loggeado" });
     }
-
   } catch (error) {
     res.status(500);
   }
