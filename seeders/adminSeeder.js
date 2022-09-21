@@ -1,6 +1,7 @@
 const User = require("../models/User");
 
-module.exports = async () => {
+module.exports = async (mongoose) => {
+  await mongoose.connection.dropCollection("users");
   await User.create({
     firstname: "Random",
     lastname: "Random",

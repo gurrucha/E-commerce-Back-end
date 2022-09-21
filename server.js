@@ -14,10 +14,10 @@ mongoose.connection
   .on("error", (error) => console.log(error));
 
 // (async function () {
-//   await mongoose.connection.dropDatabase();
-//   await adminSeeder();
-//   await categorySeeder();
-//   await productSeeder();
+//   // await mongoose.connection.dropDatabase();
+//   await adminSeeder(mongoose);
+//   await categorySeeder(mongoose);
+//   await productSeeder(mongoose);
 //   console.log("La base de datos fue ejecutada");
 // })();
 

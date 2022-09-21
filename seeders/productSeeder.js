@@ -4,7 +4,8 @@ const Category = require("../models/Category");
 const db = require("../db/dataProducts");
 const slugify = require("slugify");
 
-module.exports = async () => {
+module.exports = async (mongoose) => {
+  await mongoose.connection.dropCollection("products");
   for (const product of db) {
     const newProduct = await Product.create({
       name: product.name,
@@ -15,12 +16,12 @@ module.exports = async () => {
       category: product.categories,
       slug: slugify(product.name, { lower: true }),
     });
-    
-    await Category.findOneAndUpdate({ name: product.categories },
-      {
-        $push: { products: newProduct._id }
-      }
-    );
 
+    await Category.findOneAndUpdate(
+      { name: product.categories },
+      {
+        $push: { products: newProduct._id },
+      },
+    );
   }
 };

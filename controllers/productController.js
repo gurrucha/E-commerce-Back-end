@@ -58,8 +58,6 @@ async function store(req, res) {
     keepExtensions: true,
   });
   form.parse(req, async (err, fields, files) => {
-    const ext = path.extname(files.picture.filepath);
-
     const { data, error } = await supabase.storage
       .from("gema-product-img")
       .upload(files.picture.newFilename, fs.createReadStream(files.picture.filepath), {
