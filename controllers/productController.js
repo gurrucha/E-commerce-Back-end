@@ -79,7 +79,11 @@ async function store(req, res) {
             price: fields.price,
             stock: fields.stock,
             description: fields.description,
-            pictures: [files.picture.newFilename],
+            pictures: [
+              `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${
+                files.picture.newFilename
+              }`,
+            ],
             category: fields.category,
             slug: slugify(fields.name, { lower: true }),
           });
