@@ -17,6 +17,7 @@ async function loggedUser(req, res) {
 async function update(req, res) {
   try {
     const user = await User.findById(req.params.id);
+
     if (user && !user.isAdmin) {
       const compare = await bcrypt.compare(req.body.currentPassword, user.password);
       if (compare) {
@@ -34,6 +35,8 @@ async function update(req, res) {
       } else {
         return res.status(400).json({ message: "Credenciales inválidas" });
       }
+    } else {
+      res.status(401).json("Los datos del administrador no pueden ser alterados.");
     }
   } catch (error) {
     res.status(400).json({ Message: "No se pudo actualizar la información del usuario." });
