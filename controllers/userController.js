@@ -17,7 +17,7 @@ async function loggedUser(req, res) {
 async function update(req, res) {
   try {
     const user = await User.findById(req.params.id);
-    if (user) {
+    if (user && !user.isAdmin) {
       const compare = await bcrypt.compare(req.body.currentPassword, user.password);
       if (compare) {
         const userForUpdate = await User.findById(req.params.id);
@@ -26,11 +26,13 @@ async function update(req, res) {
           (userForUpdate.username = req.body.username),
           (userForUpdate.phone = req.body.phone),
           (userForUpdate.adress = req.body.adress),
-          (userForUpdate.password = req.body.newPassword ? req.body.newPassword : user.password),
+          (userForUpdate.password = req.body.newPassword
+            ? req.body.newPassword
+            : req.body.currentPassword),
           await userForUpdate.save();
         return res.status(200).json({ Message: "Se actualizó la información del usuario!" });
       } else {
-        return res.status(400).json({ message: "Invalid hola credentials." });
+        return res.status(400).json({ message: "Credenciales inválidas" });
       }
     }
   } catch (error) {
