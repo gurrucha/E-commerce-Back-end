@@ -51,15 +51,12 @@ async function show(req, res) {
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
 
 async function store(req, res) {
-
-
   const form = formidable({
     multiples: true,
     keepExtensions: true,
   });
 
   form.parse(req, async (err, fields, files) => {
-<<<<<<< HEAD
     const allPictures = []
     for (let i = 0; i < fields.amountImages; i++) {
       const PersistentFile = files[`product.picture.${i}`];
@@ -71,16 +68,6 @@ async function store(req, res) {
           upsert: false,
           contentType: PersistentFile.mimetype,
         });
-=======
-    const { data, error } = await supabase.storage
-      .from("gema-product-img")
-      .upload(files.picture.newFilename, fs.createReadStream(files.picture.filepath), {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: files.picture.mimetype,
-      });
->>>>>>> 22e446c81762939a33e577fd7070f072afbb47e4
-
       allPictures.push(
         `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${PersistentFile.newFilename
         }`
