@@ -48,44 +48,50 @@ async function show(req, res) {
   }
 }
 
-// Add a new product (only admin)
-
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_API_KEY);
 
 async function store(req, res) {
+
+
   const form = formidable({
     multiples: true,
     keepExtensions: true,
   });
+
   form.parse(req, async (err, fields, files) => {
-    const ext = path.extname(files.picture.filepath);
+    const allPictures = []
+    for (let i = 0; i < fields.amountImages; i++) {
+      const PersistentFile = files[`product.picture.${i}`];
 
-    const { data, error } = await supabase.storage
-      .from("gema-product-img")
-      .upload(files.picture.newFilename, fs.createReadStream(files.picture.filepath), {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: files.picture.mimetype,
-      });
+      const { data, error } = await supabase.storage
+        .from("gema-product-img")
+        .upload(PersistentFile.newFilename, fs.createReadStream(PersistentFile.filepath), {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: PersistentFile.mimetype,
+        });
 
+      allPictures.push(
+        `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${PersistentFile.newFilename
+        }`
+      )
+
+    }
     try {
-      const product = await Product.findOne({ name: fields.name });
+      const product = await Product.findOne({ name: fields['product.name'] });
       if (product) {
         return res.json(409);
       } else {
+
         try {
           const newProduct = new Product({
-            name: fields.name,
-            price: fields.price,
-            stock: fields.stock,
-            description: fields.description,
-            pictures: [
-              `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${
-                files.picture.newFilename
-              }`,
-            ],
-            category: fields.category,
-            slug: slugify(fields.name, { lower: true }),
+            name: fields['product.name'],
+            price: fields['product.price'],
+            stock: fields['product.stock'],
+            description: fields['product.description'],
+            pictures: allPictures,
+            category: fields['product.category'],
+            slug: slugify(fields['product.name'], { lower: true }),
           });
           newProduct.save();
           return res.status(200).json({ message: "El producto se guardo correctamente" });
