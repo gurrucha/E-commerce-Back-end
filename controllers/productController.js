@@ -164,6 +164,7 @@ async function update(req, res) {
       const picturesAsArray = req.query.pictures.split(",")
       allNewPictures = [...allNewPictures, ...picturesAsArray];
     }
+    
     //ELIMINATE ALL CORRESPONDING PICTURES
     const picturesAsArray = req.query.pictures.split(",")
     for (const pic of currentProduct.pictures) {
