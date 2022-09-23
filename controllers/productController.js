@@ -57,8 +57,9 @@ async function store(req, res) {
   });
 
   form.parse(req, async (err, fields, files) => {
+    console.log(files.pictures)
     const allPictures = []
-    if (!files.pictures.length) {
+    if (!files.pictures.length && files.pictures) {
       const { data, error } = await supabase.storage
         .from("gema-product-img")
         .upload(files.pictures.newFilename, fs.createReadStream(files.pictures.filepath), {
@@ -72,21 +73,21 @@ async function store(req, res) {
       )
     } else {
       for (const picture of files.pictures) {
-        const { data, error } = await supabase.storage
-          .from("gema-product-img")
-          .upload(picture.newFilename, fs.createReadStream(picture.filepath), {
-            cacheControl: "3600",
-            upsert: false,
-            contentType: picture.mimetype,
-          });
-        allPictures.push(
-          `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${picture.newFilename
-          }`
-        )
+        if (picture.newFilename) {
+          const { data, error } = await supabase.storage
+            .from("gema-product-img")
+            .upload(picture.newFilename, fs.createReadStream(picture.filepath), {
+              cacheControl: "3600",
+              upsert: false,
+              contentType: picture.mimetype,
+            });
+          allPictures.push(
+            `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${picture.newFilename
+            }`
+          )
+        }
       }
     }
-
-
     try {
       const product = await Product.findOne({ name: fields.name });
       if (product) {
@@ -117,46 +118,110 @@ async function store(req, res) {
 }
 
 async function update(req, res) {
-  try {
-    let productExists;
-    if (req.body.product.name !== req.body.originalName) {
-      productExists = await Product.findOne({ name: req.body.product.name });
-    }
-    if (productExists) {
-      return res.json(409);
-    } else {
-      try {
-        await Product.findOneAndUpdate(
-          { slug: req.params.slug },
-          {
-            name: req.body.product.name,
-            category: req.body.product.category,
-            price: req.body.product.price,
-            stock: req.body.product.stock,
-            description: req.body.product.description,
-          },
-        );
-        const updateProduct = await Product.findOne({ slug: req.params.slug });
-        if (updateProduct.category !== req.body.originalCategory) {
-          await Category.findOneAndUpdate(
-            { name: updateProduct.category },
-            { $push: { products: updateProduct._id } },
-          );
-          await Category.findOneAndUpdate(
-            { name: req.body.originalCategory },
-            { $pull: { products: updateProduct._id } },
-          );
+  const form = formidable({
+    multiples: true,
+    keepExtensions: true,
+  });
+
+  form.parse(req, async (err, fields, files) => {
+    const currentProduct = await Product.findOne({ slug: req.params.slug })
+    let allNewPictures = []
+    if (files.pictures) {
+      if (!files.pictures.length) {
+        const { data, error } = await supabase.storage
+          .from("gema-product-img")
+          .upload(files.pictures.newFilename, fs.createReadStream(files.pictures.filepath), {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: files.pictures.mimetype,
+          });
+        allNewPictures.push(
+          `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${files.pictures.newFilename
+          }`
+        )
+        const picturesAsArray = req.query.pictures.split(",")
+        allNewPictures = [...allNewPictures, ...picturesAsArray]
+      } else {
+        for (const picture of files.pictures) {
+          if (picture.newFilename) {
+            const { data, error } = await supabase.storage
+              .from("gema-product-img")
+              .upload(picture.newFilename, fs.createReadStream(picture.filepath), {
+                cacheControl: "3600",
+                upsert: false,
+                contentType: picture.mimetype,
+              });
+            allNewPictures.push(
+              `${`https://bvmhwmeqjbkperroelhp.supabase.co/storage/v1/object/public/gema-product-img/`}${picture.newFilename
+              }`
+            )
+          }
         }
-        return res.json(200);
-      } catch (error) {
-        res.status(500).json({ message: "Error! Not a valid product" });
+        const picturesAsArray = req.query.pictures.split(",");
+        allNewPictures = [...allNewPictures, ...picturesAsArray];
+      }
+    } else {
+      const picturesAsArray = req.query.pictures.split(",")
+      allNewPictures = [...allNewPictures, ...picturesAsArray];
+    }
+    //ELIMINATE ALL CORRESPONDING PICTURES
+    const picturesAsArray = req.query.pictures.split(",")
+    for (const pic of currentProduct.pictures) {
+      if (pic.includes("supabase")) {
+        if (!picturesAsArray.includes(`${pic}`)) {
+          const partToDelete = pic.split("/");
+          const { data, error } = await supabase.storage
+            .from('avatars')
+            .remove([`${partToDelete[8]}`])
+        }
       }
     }
-  } catch (error) {
-    if (error) {
-      return res.status(400).json({ message: "A field is missing." });
+
+    try {
+      //VERIFY IF PRODUCT EXISTS
+      let productExists;
+      if (fields.name !== req.query.originalName) {
+        productExists = await Product.findOne({ name: fields.name });
+      }
+      if (productExists) {
+        return res.json(409);
+      } else {
+        try {
+          await Product.findOneAndUpdate(
+            { slug: req.params.slug },
+            {
+              name: fields.name,
+              category: fields.category,
+              price: fields.price,
+              stock: fields.stock,
+              description: fields.description,
+              pictures: allNewPictures,
+            },
+          );
+          const updateProduct = await Product.findOne({ slug: req.params.slug });
+          if (updateProduct.category !== req.query.originalCategory) {
+            await Category.findOneAndUpdate(
+              { name: updateProduct.category },
+              { $push: { products: updateProduct._id } },
+            );
+            await Category.findOneAndUpdate(
+              {
+                name: req.query.originalCategory
+              },
+              { $pull: { products: updateProduct._id } },
+            );
+          }
+          return res.json(200);
+        } catch (error) {
+          res.status(500).json({ message: "Error! Not a valid product" });
+        }
+      }
+    } catch (error) {
+      if (error) {
+        return res.status(400).json({ message: "A field is missing." });
+      }
     }
-  }
+  })
 }
 
 // Remove product from storage (only admin)
