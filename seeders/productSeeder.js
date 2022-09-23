@@ -1,6 +1,5 @@
 const Product = require("../models/Product");
 const Category = require("../models/Category");
-
 const db = require("../db/dataProducts");
 const slugify = require("slugify");
 

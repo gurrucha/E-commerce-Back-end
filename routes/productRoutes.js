@@ -1,11 +1,8 @@
 const express = require("express");
 const productRouter = express.Router();
 const productController = require("../controllers/productController");
-const categoryController = require("../controllers/categoryController");
 
 productRouter.get("/products", productController.index);
-//change to products
-
 productRouter.get("/product/:slug", productController.show);
 productRouter.post("/products", productController.store);
 productRouter.patch("/products/:slug", productController.update);

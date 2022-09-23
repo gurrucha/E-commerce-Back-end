@@ -10,7 +10,6 @@ async function login(req, res) {
   if (user) {
     if (user.isAdmin) {
       const compare = await bcrypt.compare(req.body.password, user.password);
-      // const compare = true;
       if (compare) {
         const token = jwt.sign(
           { user: user.username, id: user.id, isAdmin: true },

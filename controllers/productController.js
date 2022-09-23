@@ -1,9 +1,8 @@
 const { Product } = require("../models");
 const Category = require("../models/Category");
-const formidable = require("formidable");
-const path = require("path");
 const fs = require("fs");
 const { createClient } = require("@supabase/supabase-js");
+const formidable = require("formidable");
 const _ = require("lodash");
 const slugify = require("slugify");
 
@@ -164,7 +163,7 @@ async function update(req, res) {
       const picturesAsArray = req.query.pictures.split(",")
       allNewPictures = [...allNewPictures, ...picturesAsArray];
     }
-    
+
     //ELIMINATE ALL CORRESPONDING PICTURES
     const picturesAsArray = req.query.pictures.split(",")
     for (const pic of currentProduct.pictures) {

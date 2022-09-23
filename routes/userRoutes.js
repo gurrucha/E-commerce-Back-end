@@ -8,10 +8,8 @@ const verifyJwt = jwt({
   algorithms: ["HS256"],
 });
 
-//userRouter.get("/users", userController.index);
-userRouter.get("/users", userController.show);
-
-userRouter.get("/users/:id", verifyJwt, userController.loggedUser);
+userRouter.get("/users", userController.index);
+userRouter.get("/users/:id", verifyJwt, userController.show);
 userRouter.patch("/users/:id", verifyJwt, userController.update);
 userRouter.delete("/users/:id", userController.destroy);
 

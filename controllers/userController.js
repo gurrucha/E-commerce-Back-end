@@ -1,12 +1,12 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
 
-async function show(req, res) {
+async function index(req, res) {
   const allUsers = await User.find();
   res.json(allUsers);
 }
 
-async function loggedUser(req, res) {
+async function show(req, res) {
   const user = await User.findById(req.params.id).select(
     "firstname lastname username email adress phone orderHistory",
   );
@@ -63,7 +63,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
-  loggedUser,
+  index,
   show,
   update,
   destroy,
