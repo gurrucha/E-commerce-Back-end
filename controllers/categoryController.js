@@ -12,8 +12,8 @@ async function index(req, res) {
 
 async function show(req, res) {
    try {
-      const allCategories = await Category.findOne({ name: req.params.name }).populate("products");
-      res.status(200).json(allCategories);
+      const allProducts = await Product.find({ category: { $regex: req.params.name } });
+      res.status(200).json(allProducts);
    } catch (error) {
       res.status(400).json({ message: "Error! No category found" })
    }
